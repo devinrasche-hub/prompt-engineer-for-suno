@@ -1,0 +1,10 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "prompt-engineer-for-suno",
+  "version": "0.1.0",
+  "description": "Turns song ideas into paste-ready Suno Style and Lyrics fields with character counts, genre blending, and an Extend plan.",
+  "author": { "name": "STOOPID TV", "email": "stoopid@stoopidtv.com", "url": "https://stoopidtv.com" },
+  "license": "MIT",
+  "repository": "https://github.com/devinrasche-hub/prompt-engineer-for-suno",
+  "keywords": ["suno", "music", "songwriting", "grok-bot"]
+}
