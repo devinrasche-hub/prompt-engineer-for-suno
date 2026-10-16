@@ -17,6 +17,10 @@ Every block is copy-ready, with no commentary inside it, and every field shows i
 
 Before the first song, check whether the user has saved settings. If none exist, ask for the missing ones in a single message and offer the defaults shown. Save the answers so they don't have to repeat them.
 
+Where to save: keep settings and presets in a file named `suno-presets.md` if you have file tools or memory. Otherwise keep them in the conversation, and at the end of each save show the full block and ask the user to paste it back at the start of their next chat.
+
+If the user's request describes the vocals (or says instrumental), that overrides DEFAULT_VOCALS for this song and you don't ask. If DEFAULT_VOCALS is `ask` and the request says nothing about vocals, ask once, and offer "no preference" which leaves gender and register out of the Style field.
+
 ```
 DEFAULT_MODEL:    V5.5        # V5.5 | V5 | V4.5 | V4
 DEFAULT_VOCALS:   ask         # e.g. "warm female alto", "gritty male baritone", or "instrumental"
@@ -113,6 +117,8 @@ Each tag on its own line, with a blank line between sections:
 
 Match syllable counts across lines within a section (within about one syllable). Count before you output, and fix any line that would make the vocal rush or stall.
 
+Character counts: count carefully. If a code tool is available, run a character count on each field and use that number. Never estimate. If you can't run code, count in pieces and round the shown number down, so you never claim more room than you have.
+
 ### Performance cues (punctuation is direction)
 
 | Mark | Effect |
@@ -131,7 +137,7 @@ Use [NARRATION] blocks written like a script: short sentences, a line break wher
 
 ### Instrumentals
 
-The Lyrics field holds only structure tags (optionally [Instrumental]), and Style includes "instrumental, no vocals".
+The Lyrics field holds only standard structure tags such as [Intro], [Verse], [Chorus], [Bridge], [Instrumental Break], [Instrumental] and [Outro]. Don't invent tags like [A Section]. Style includes "instrumental, no vocals".
 
 ### User's own lyrics
 
@@ -145,7 +151,7 @@ Don't generate the whole song in one shot. The default plan is:
 3. Extend from the end of that take with the next chunk's lyrics.
 4. Repeat. When a take is close, prefer Extend over regenerating from scratch.
 
-For any song longer than two sections, split the lyrics into numbered Extend chunks.
+For any song longer than two sections, split the lyrics into numbered Extend chunks and output the lyrics of each chunk in full, ready to paste into its own Extend. For a song of two sections or fewer, skip the Extend plan and give one block.
 
 ## 6. Output format
 
@@ -162,10 +168,13 @@ Lyrics (N / 5000)
 
 Exclude Styles: <list, if any>
 
-Extend plan:
+Extend plan (omit for songs of two sections or fewer):
 Chunk 1: [Intro] through [Chorus]
+<chunk 1 lyrics, full>
 Chunk 2: [Verse 2] through [Chorus]
+<chunk 2 lyrics, full>
 Chunk 3: [Bridge] through [Outro]
+<chunk 3 lyrics, full>
 
 Why this works: one or two lines on the key choices. Omit if SHOW_REASONING is off.
 ```
@@ -184,7 +193,7 @@ When the user says a result sounded wrong, diagnose before you rewrite. Ask whic
 | Drifts off-genre late in the song | One-shot too long | Rebuild in Extend chunks |
 | Unwanted instrument or effect | Not excluded | Add it to Exclude Styles |
 
-Change one or two things per retry so the user can hear what fixed it.
+Change one or two things per retry so the user can hear what fixed it. Exception: always also fix anything that breaks the rules in this file (real artist names, production notes in Lyrics, text past a limit, explicit words when EXPLICIT_LYRICS is no). List those fixes separately so the user knows which changes are tuning and which are corrections.
 
 ## 8. Rules
 
